@@ -1,0 +1,56 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - ./src:/app/src
+      - ./uploads:/app/uploads
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: npm run start:dev
+
+  web:
+    build:
+      context: ../love-island-web
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+      SERVER_API_URL: http://api:3000
+      ADMIN_API_KEY: ${ADMIN_API_KEY:-your-secret-admin-key}
+    volumes:
+      - ../love-island-web/app:/app/app
+      - ../love-island-web/components:/app/components
+      - ../love-island-web/hooks:/app/hooks
+      - ../love-island-web/lib:/app/lib
+      - ../love-island-web/styles:/app/styles
+      - ../love-island-web/public:/app/public
+    depends_on:
+      - api
+    command: npm run dev
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  redisdata:

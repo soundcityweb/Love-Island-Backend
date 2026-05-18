@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ScheduleContentType {
+  episode
+  first_look
+  recap
+  podcast
+  highlight
+
+  @@map("schedule_content_type_enum")
+}
+
+enum SchedulePlatform {
+  ontv
+  soundcity
+  spice
+  digital
+
+  @@map("schedule_platform_enum")
+}
+
+model Schedule {
+  id            String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title         String               @db.Text
+  episodeNumber Int?                 @map("episode_number")
+  contentType   ScheduleContentType    @map("content_type")
+  platform      SchedulePlatform       @map("platform")
+  airDate       DateTime             @map("date") @db.Date
+  startTime     DateTime             @map("start_time") @db.Time(6)
+  endTime       DateTime?            @map("end_time") @db.Time(6)
+  description   String?              @db.Text
+  isPublished   Boolean              @default(true) @map("is_published")
+  createdAt     DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("schedules")
+}
