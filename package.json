@@ -6,11 +6,11 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "prisma generate && npx nest build",
+    "build": "prisma generate && node_modules/.bin/nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "npx nest start",
-    "start:dev": "npx nest start --watch",
-    "start:debug": "npx nest start --debug --watch",
+    "start": "node_modules/.bin/nest start",
+    "start:dev": "node_modules/.bin/nest start --watch",
+    "start:debug": "node_modules/.bin/nest start --debug --watch",
     "start:prod": "node dist/main",
     "migration:run": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/database/data-source.ts",
     "migration:revert": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/database/data-source.ts",
@@ -60,13 +60,13 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.28",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
-    "@nestjs/cli": "^11.0.0",
-    "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
